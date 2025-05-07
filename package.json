@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/tnm0113/morse-analysis#readme",
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
     "better-sqlite3": "^11.9.1",
     "express": "^5.1.0"
   }

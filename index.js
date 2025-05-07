@@ -1,29 +1,37 @@
-const Database = require("better-sqlite3");
+import express from "express";
+import path from "path";
+import { createClient } from "@supabase/supabase-js";
 
-const db = new Database("morse_holders.db");
-db.exec(`
-  CREATE TABLE IF NOT EXISTS holders (
-    address TEXT NOT NULL,
-    nft_id          TEXT NOT NULL,
-    days_since      REAL,
-    rarity          TEXT,
-    PRIMARY KEY (address, nft_id)
-  );
-`);
+const app = express();
+const port = process.env.PORT || 3000;
 
-function startServer() {
-    const express = require("express");
-    const app = express();
-    app.use(express.static("public")); // serve our HTML+JS
-    app.get("/api/data", (req, res) => {
-        const rows = db.prepare("SELECT * FROM holders").all();
-        res.json(rows);
-    });
-    app.listen(3000, () => console.log("→ http://localhost:3000"));
-}
+app.use(express.static(path.join(__dirname, "public")));
 
-async function main() {
-    startServer();
-}
+const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+);
 
-main().catch(console.error);
+app.get("/api/data", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("holders")
+            .select("address, nft_id, days_since, rarity");
+        if (error) throw error;
+        // optional caching headers
+        res.setHeader("Cache-Control", "public, max-age=60");
+        res.json(data);
+    } catch (err) {
+        console.error("Supabase error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 4️⃣ Fallback for SPA routing (if you need it)
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/index.html"));
+});
+
+app.listen(port, () => {
+    console.log(`Listening on http://localhost:${port}`);
+});
