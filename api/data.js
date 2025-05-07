@@ -27,7 +27,6 @@ app.get("/api/data", async (req, res) => {
     }
 });
 
-// 4️⃣ Fallback for SPA routing (if you need it)
 app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "public/index.html"));
 });
