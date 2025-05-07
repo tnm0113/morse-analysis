@@ -1,0 +1,26 @@
+{
+  "name": "morse-analysis",
+  "version": "1.0.0",
+  "description": "morse holders analysis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tnm0113/morse-analysis.git"
+  },
+  "keywords": [
+    "morse"
+  ],
+  "author": "tnm0113",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tnm0113/morse-analysis/issues"
+  },
+  "homepage": "https://github.com/tnm0113/morse-analysis#readme",
+  "dependencies": {
+    "better-sqlite3": "^11.9.1",
+    "express": "^5.1.0"
+  }
+}
